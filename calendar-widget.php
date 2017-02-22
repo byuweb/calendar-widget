@@ -334,7 +334,8 @@ a:hover, a:focus {
 }
 
 .calendar-widget-block.display-list {
-    width: 289px;
+    /*width: 289px;*/
+    width: 100%; // let width be defined by it's parent so it's controlled by the individual website.
     margin-right: 20px;
 }
 @media screen and (max-width: 1023px) {
