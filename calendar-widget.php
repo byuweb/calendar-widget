@@ -1,7 +1,3 @@
-<head>
-
-</head>
-<body>
 <?php
 /* --- See the Calendar Widget Documentation for more information: https://calendar.byu.edu/how-use-calendar-widget */
 header("Access-Control-Allow-Origin: *");
@@ -308,88 +304,87 @@ function calendar_widget_d7_hoizontal_tiles_slider($jsonArr, $startDate, $endDat
 
 
 /* ========================= CSS ========================= */
-//$css=<<<CSS
-//<style>
-///* -- General -- */
-//.calendar-block-title {
-//    font-family: "Sentinel A", "Sentinel B";
-//}
-//.block-calendar-widget div {
-//    font-family: "Gotham A", "Gotham B";
-//}
-//a {
-//    text-decoration: none;
-//    color: #003da5; // royal blue
-//}
-//a:hover, a:focus {
-//    text-decoration: none;
-//    color: #002c5c; // dark royal
-//}
-//
-///* ----------- List format -------- */
-//.block-calendar-widget {
-//    width: 289px;
-//}
-//
-//.block-calendar-widget h2.block-title {
-//    border-bottom: 1px solid #e5e5e5;
-//}
-//
-//.calendar-widget-block.display-list {
-//    width: 289px;
-//    margin-right: 20px;
-//}
-//@media screen and (max-width: 1023px) {
-//    .block-calendar-widget {
-//        width: 100%;
-//    }
-//    .calendar-widget-block.display-list {
-//        width: 100%;
-//        margin-right: 0px;
-//    }
-//}
-//.date-wrapper {
-//    display: flex;
-//    margin-bottom: 12px;
-//}
-//.date-day-number {
-//    font-family: "Sentinel A", "Sentinel B";
-//    font-weight: bold;
-//    font-size: 26px;
-//    margin-right: 7px;
-//}
-//.date-text {
-//    font-weight: 500;
-//    font-size: 21px;
-//    padding-top: 4px;
-//
-//}
-//
-//
-//.event-content {
-//    padding: 0px 0px 15px 15px;
-//    display: flex;
-//    justify-content: space-between;
-//    line-height: 1.3em;
-//}
-//
-//.event-title {
-//
-//}
-//.event-time {
-//    min-width: 60px;
-//    margin-left: 12px;
-//    color: #767676;
-//    font-size: 14px;
-//    display: flex;
-//    justify-content: flex-end;
-//}
-//
-//
-//</style>
-//CSS;
-//
-//echo $css;
+$css=<<<CSS
+<style>
+/* -- General -- */
+.calendar-block-title {
+    font-family: "Sentinel A", "Sentinel B";
+}
+.block-calendar-widget div {
+    font-family: "Gotham A", "Gotham B";
+}
+a {
+    text-decoration: none;
+    color: #003da5; // royal blue
+}
+a:hover, a:focus {
+    text-decoration: none;
+    color: #002c5c; // dark royal
+}
+
+/* ----------- List format -------- */
+.block-calendar-widget {
+    width: 289px;
+}
+
+.block-calendar-widget h2.block-title {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.calendar-widget-block.display-list {
+    width: 289px;
+    margin-right: 20px;
+}
+@media screen and (max-width: 1023px) {
+    .block-calendar-widget {
+        width: 100%;
+    }
+    .calendar-widget-block.display-list {
+        width: 100%;
+        margin-right: 0px;
+    }
+}
+.date-wrapper {
+    display: flex;
+    margin-bottom: 12px;
+}
+.date-day-number {
+    font-family: "Sentinel A", "Sentinel B";
+    font-weight: bold;
+    font-size: 26px;
+    margin-right: 7px;
+}
+.date-text {
+    font-weight: 500;
+    font-size: 21px;
+    padding-top: 4px;
+
+}
+
+
+.event-content {
+    padding: 0px 0px 15px 15px;
+    display: flex;
+    justify-content: space-between;
+    line-height: 1.3em;
+}
+
+.event-title {
+
+}
+.event-time {
+    min-width: 60px;
+    margin-left: 12px;
+    color: #767676;
+    font-size: 14px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+</style>
+CSS;
+
+echo $css;
 
 ?>
-</body>
