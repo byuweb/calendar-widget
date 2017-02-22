@@ -327,7 +327,7 @@ a:hover, a:focus {
     width: 289px;
 }
 
-.block-calendar-widget h2.block-title {
+.block-calendar-widget h2 {
     border-bottom: 1px solid #e5e5e5;
 }
 
