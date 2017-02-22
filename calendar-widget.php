@@ -328,6 +328,7 @@ a:hover, a:focus {
 }
 
 .block-calendar-widget h2 {
+    color: #002e5d;
     border-bottom: 1px solid #e5e5e5;
 }
 
