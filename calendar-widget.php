@@ -8,7 +8,6 @@ date_default_timezone_set('America/Denver');
 $unique = uniqid('output-div-');
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-
 /* STEP 1. REQUIRED. Set Categories Here: --- */
 $blockTitle = isset($_POST["title"]) ? trim($_POST["title"]) : "Calendar Events";
 
@@ -345,17 +344,17 @@ a:hover, a:focus {
         margin-right: 0px;
     }
 }
-.date-wrapper {
+.block-calendar-widget .date-wrapper {
     display: flex;
     margin-bottom: 12px;
 }
-.date-day-number {
+.block-calendar-widget .date-day-number {
     font-family: "Sentinel A", "Sentinel B";
     font-weight: bold;
     font-size: 26px;
     margin-right: 7px;
 }
-.date-text {
+.block-calendar-widget .date-text {
     font-weight: 500;
     font-size: 21px;
     padding-top: 4px;
@@ -363,17 +362,14 @@ a:hover, a:focus {
 }
 
 
-.event-content {
+.block-calendar-widget .event-content {
     padding: 0px 0px 15px 15px;
     display: flex;
     justify-content: space-between;
     line-height: 1.3em;
 }
 
-.event-title {
-
-}
-.event-time {
+.block-calendar-widget .event-time {
     min-width: 60px;
     margin-left: 12px;
     color: #767676;
