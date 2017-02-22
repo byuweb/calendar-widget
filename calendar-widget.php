@@ -10,7 +10,7 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 
 /* STEP 1. REQUIRED. Set Categories Here: --- */
-$blockTitle = isset($_POST["title"]) ? strtolower(trim($_POST["title"])) : "Calendar Events";
+$blockTitle = isset($_POST["title"]) ? trim($_POST["title"]) : "Calendar Events";
 
 $categories = isset($_POST["categories"]) ? strtolower(trim($_POST["categories"])) : "all";
 
