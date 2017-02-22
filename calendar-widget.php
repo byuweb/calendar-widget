@@ -15,7 +15,7 @@ $categories = isset($_POST["categories"]) ? strtolower(trim($_POST["categories"]
 
 $date = isset($_POST["days"]) ? intval($_POST["days"]) : 7;
 
-$price = isset($_POST["price"]) ? strtolower(trim($_POST["price"])) : "all";
+$price = isset($_POST["price"]) ? strtolower(trim($_POST["price"])) : "";
 
 $displayType = isset($_POST["display"]) ? intval($_POST["display"]) : 1;
 
@@ -43,23 +43,23 @@ switch ($displayType) {
     case 1:  // list type, grouped by date
         $html = calendar_widget_d7_list_format($jsonArr, $startDate, $endDate);
         break;
-    case 2:  // Vertical tiles, limited to first 3
-        $html = calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDate);
-        break;
-    case 3:  // Horizontal tiles, limited to first 3
-        $html = calendar_widget_d7_hoizontal_tiles_limited($jsonArr, $startDate, $endDate);
-        break;
-    case 4:  // Vertical tiles, showing 3 in a slider
-        $html = calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate);
-        break;
-    case 5:  // Horizontal tiles, showing 3 in a slider
-        $html = calendar_widget_d7_horizontal_tiles_slider($jsonArr, $startDate, $endDate);
-        break;
+//    case 2:  // Vertical tiles, limited to first 3
+//        $html = calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDate);
+//        break;
+//    case 3:  // Horizontal tiles, limited to first 3
+//        $html = calendar_widget_d7_hoizontal_tiles_limited($jsonArr, $startDate, $endDate);
+//        break;
+//    case 4:  // Vertical tiles, showing 3 in a slider
+//        $html = calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate);
+//        break;
+//    case 5:  // Horizontal tiles, showing 3 in a slider
+//        $html = calendar_widget_d7_horizontal_tiles_slider($jsonArr, $startDate, $endDate);
+//        break;
     default:
         $html = calendar_widget_d7_list_format($jsonArr, $startDate, $endDate);
         break;
 }
-print $blockTitle;
+print "<h2>" . $blockTitle . "</h2>";
 print $html;
 
 
