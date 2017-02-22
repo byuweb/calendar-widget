@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="//cloud.typography.com/75214/6517752/css/fonts.css">
+<title></title>
+</head>
+<body>
+
+<script>
+    (function() {
+        var data = {
+
+            /* STEP 1. REQUIRED. Set Categories Here: --- */
+            title: "Calendar Events",
+
+            /* STEP 2. REQUIRED. Set Categories Here: ---
+             See https://calendar.byu.edu/subscribe to find what category ids you want. Separate them by +'s. i.e. 10+4+151  ----- */
+            categories: "4+6+10",
+            /* -- If you want to allow ALL BYU Calendar events for this time period, set categories to all instead: */
+            //categories:  "all",
+
+            /* STEP 3. REQUIRED. Enter the number of days going forward from today -- */
+            days: 14,
+
+            /* STEP 4. OPTIONAL. IF you want to filter values to only those equal to or below a certain price, add a price filter in decimal or integer format -- */
+//            price: '5',
+            //price: '4.5',
+            price: '',
+            /* -- Display Type Options:
+            1: list type, grouped by date
+            2: Vertical tiles, limited to first 3 - in progress.
+            3: Horizontal tiles, limited to first 3 - in progress.
+            4: Vertical tiles, showing 3 in a slider - not available yet.
+            5: Horizontal tiles, showing 3 in a slider - not available yet.
+            */
+            display: 1,
+        };
+        
+        var unique = "parent-div-" + Math.floor(Math.random()*(9999999-1000000+1)+1000000);
+        document.write("<div class='block-calendar-widget' id='"+ unique +"'></div>");
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var response = xhttp.responseText;
+                document.getElementById(unique).innerHTML = response;
+            }
+        };
+        xhttp.open("POST", "https://calendar-test.byu.edu/calendar-widget/calendar-widget.php");
+        xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhttp.send(JSON.stringify(data));
+    })();
+</script>
+
+
+</body>
+</html>
