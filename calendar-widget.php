@@ -157,7 +157,7 @@ function calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDat
             $limit = 3;
         }
 //    $limit = 3;
-        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '">';
+        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '" style="display: flex; flex-wrap: wrap; margin: 20px 0px;">';
 //    $html .= '<p>the limit is ' . $limit . '</p>';
         $count = 0;
         foreach($jsonArr as $item) {
@@ -200,7 +200,7 @@ function calendar_widget_d7_horizontal_tiles_limited($jsonArr, $startDate, $endD
         $html = "<h3>No events.</h3>";
     } else {
 
-        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '">';
+        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '" style="display: flex; flex-wrap: wrap; margin: 20px 0px;">';
 //    $html .= '<p>the limit is ' . $limit . '</p>';
         $count = 0;
         foreach($jsonArr as $item) {
@@ -246,7 +246,7 @@ function calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate
             $limit = 3;
         }
 //    $limit = 3;
-        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '">';
+        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '" style="display: flex; flex-wrap: wrap; margin: 20px 0px;">';
 //    $html .= '<p>the limit is ' . $limit . '</p>';
         $count = 0;
         foreach($jsonArr as $item) {
@@ -289,7 +289,7 @@ function calendar_widget_d7_horizontal_tiles_slider($jsonArr, $startDate, $endDa
         $html = "<h3>No events.</h3>";
     } else {
 
-        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '">';
+        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '" style="display: flex; flex-wrap: wrap; margin: 20px 0px;">';
 //    $html .= '<p>the limit is ' . $limit . '</p>';
         $count = 0;
         foreach($jsonArr as $item) {
