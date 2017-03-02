@@ -23,7 +23,7 @@ $displayType = isset($_POST["display"]) ? intval($_POST["display"]) : 1;
 $startDate = date("Y-m-d");
 $endDate   = date("Y-m-d", strtotime("now + " . $date . " days"));
 
-$url = 'http://calendar-test.byu.edu/api/Events?event[min][date]=' . $startDate . '&event[max][date]=' . $endDate . '&categories=' . $categories . '&price=' . $price;
+$url = 'https://calendar-test.byu.edu/api/Events?event[min][date]=' . $startDate . '&event[max][date]=' . $endDate . '&categories=' . $categories . '&price=' . $price;
 
 $options = array(
     'http' => array(
@@ -60,6 +60,8 @@ switch ($displayType) {
         $html = calendar_widget_d7_list_format($jsonArr, $startDate, $endDate);
         break;
 }
+/* include calendar tile component for those display options */
+print '<script src="//cdn.byu.edu/byu-calendar-tile/unstable/components.js"></script>';
 print "<h2>" . $blockTitle . "</h2>";
 print $html;
 
@@ -139,58 +141,39 @@ function calendar_widget_d7_list_format($jsonArr, $startDate, $endDate) {
  */
 function calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDate) {
 
+
     if (empty($jsonArr)) {
         // list is empty.
         $html = "<h3>No events.</h3>";
     } else {
-
-        $html = '<div class="startDate-' . $startDate . ' endDate-' . $endDate . '">';
-//    $html = '<h3>' . $startDate . ' through ' . $endDate . '</h3><p>HEre is some text.</p><p>And here is some more text.</p>';
-//
-        $currentTime = new DateTime();
-        $currentTime->setTimestamp(strtotime("now"));
-
-        $first_item = true;
-
+        if($limit == -1) {
+            $limit = 3;
+        }
+//    $limit = 3;
+        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '">';
+//    $html .= '<p>the limit is ' . $limit . '</p>';
+        $count = 0;
         foreach($jsonArr as $item) {
-//    $html .= '<p>There is an event.<p>';
-            $new_date = new DateTime();
-            $new_date->setTimestamp(strtotime($item['StartDateTime']));
-            // set date's timezone if needed
+            if($count == $limit) break;
+            $html .= '<byu-calendar-tile layout="vertical">';
+            $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
+            $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
 
-            if ($first_item) {
-                $html .= '<div class="date-wrapper"><div class="date-day-number">' . date("j", strtotime($item['StartDateTime'])) . '</div><div class="date">' . date("M, l", strtotime($item['StartDateTime'])) . '</div></div>';
-                $currentTime = $new_date;
-                $first_item = false;
-            }
 
-            $diff = $currentTime->diff($new_date);
-
-            if ($diff->format('%a') !== '0') {
-                $html .= '<h3><div class="date">' . date("l, F j", strtotime($item['StartDateTime'])) . '</div></h3>';
-                $currentTime = $new_date;
-            }
-
-            $html .='<div class="event">';
-
-//    $html .= '<img src="' . $item['ImgUrl'] . '">';
-            $html .= '<div class="event-content">';
-            $html .= '<a href="' . $item['FullUrl'] . ' " target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
-
-            if ($item['AllDay'] == false) {
-                $html .= '<div class="time">' . date("g:i A", strtotime($item['StartDateTime']));
-                if ($item['EndDateTime'] != null) {
-                    $html .= ' - ' . date("g:i A", strtotime($item['EndDateTime']));
-                }
-                $html .= ' MT </div>';
+            if ($item['AllDay'] == 'false') {
+                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). '</div>';
             } else {
-                $html .= '<div class="time">All Day</div>';
+                $html .= '<div class="time" slot="time">All Day</div>';
             }
 
-//      $item_id = uniqid();
+            if ($item['LocationName'] != null) {
+                $html .= '<div class="location" slot="location">' . $item['LocationName'] . '</div>';
+            }
+            $html .= '</byu-calendar-tile>';
+//Testing dummy content:
+//        $html .= '<byu-calendar-tile layout="vertical">  <p slot="date">2017-02-15</p> 	<a href="www.google.com" slot="title">My Event Title</a><p slot="time">7:00 PM</p>	<p slot="location">Wilkinson Ballroom</p></byu-calendar-tile>';
+            $count++;
 
-            $html .= '</div>';
-            $html .= '</div>';
         }
         $html .= '</div>'; // ending the wrapping div with start and end date classes
     }
@@ -210,53 +193,28 @@ function calendar_widget_d7_hoizontal_tiles_limited($jsonArr, $startDate, $endDa
         $html = "<h3>No events.</h3>";
     } else {
 
-        $html = '<div class="startDate-' . $startDate . ' endDate-' . $endDate . '">test: </div>';
-//    $html = '<h3>' . $startDate . ' through ' . $endDate . '</h3><p>HEre is some text.</p><p>And here is some more text.</p>';
-//
-        $currentTime = new DateTime();
-        $currentTime->setTimestamp(strtotime("now"));
-
-        $first_item = true;
-
+        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '">';
+//    $html .= '<p>the limit is ' . $limit . '</p>';
+        $count = 0;
         foreach($jsonArr as $item) {
-//    $html .= '<p>There is an event.<p>';
-            $new_date = new DateTime();
-            $new_date->setTimestamp(strtotime($item['StartDateTime']));
-            // set date's timezone if needed
-
-            if ($first_item) {
-                $html .= '<div class="date-day-number">' . date("j", strtotime($item['StartDateTime'])) . '</div><div class="date">' . date("M, l", strtotime($item['StartDateTime'])) . '</div>';
-                $currentTime = $new_date;
-//        $first_item = false;
-            }
-
-            $diff = $currentTime->diff($new_date);
-
-            if ($diff->format('%a') !== '0') {
-                $html .= '<h3><div class="date">' . date("l, F j", strtotime($item['StartDateTime'])) . '</div></h3>';
-                $currentTime = $new_date;
-            }
-
-            $html .='<div class="event">';
-
-//    $html .= '<img src="' . $item['ImgUrl'] . '">';
-            $html .= '<div class="event-content">';
-            $html .= '<a href="' . $item['FullUrl'] . ' " target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
-
-            if ($item['AllDay'] == false) {
-                $html .= '<div class="time">' . date("g:i A", strtotime($item['StartDateTime']));
-                if ($item['EndDateTime'] != null) {
-                    $html .= ' - ' . date("g:i A", strtotime($item['EndDateTime']));
-                }
-                $html .= ' MT </div>';
+            if($count == $limit) break;
+            $html .= '<byu-calendar-tile layout="horizontal">';
+            $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
+            $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
+            if ($item['AllDay'] == 'false') {
+                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). '</div>';
             } else {
-                $html .= '<div class="time">All Day</div>';
+                $html .= '<div class="time" slot="time">All Day</div>';
             }
-
-//      $item_id = uniqid();
-
-            $html .= '</div>';
-            $html .= '</div>';
+//      print_r($item['Description']);
+            if ($item['ShortDescription'] != 'null') {
+                $html .= '<p slot="description">' . $item['ShortDescription'] . '</p>';
+            }
+            if ($item['LocationName'] != null) {
+                $html .= '<div class="location" slot="location">' . $item['LocationName'] . '</div>';
+            }
+            $html .= '</byu-calendar-tile>';
+            $count++;
         }
         $html .= '</div>'; // ending the wrapping div with start and end date classes
     }
