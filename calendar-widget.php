@@ -67,7 +67,7 @@ switch ($displayType) {
         break;
 }
 /* include calendar tile component for those display options */
-print '<script src="//cdn.byu.edu/byu-calendar-tile/unstable/components.js"></script>';
+//print '<script src="//cdn.byu.edu/byu-calendar-tile/unstable/components.js"></script>';
 print "<h2>" . $blockTitle . "</h2>";
 print $html;
 
