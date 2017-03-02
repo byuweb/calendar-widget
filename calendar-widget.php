@@ -19,6 +19,12 @@ $price = isset($_POST["price"]) ? strtolower(trim($_POST["price"])) : "";
 
 $displayType = isset($_POST["display"]) ? intval($_POST["display"]) : 1;
 
+$limit = isset($_POST["limit"]) ? intval($_POST["limit"]) : "0"; // default to no limit
+// using 0 to represent no limit for the interface side, to avoid confusion of putting -1
+if($limit == 0) {
+    $limit = "-1"; // counter will never hit -1, no limit
+}
+
 /* startDate usually stays as today -- */
 $startDate = date("Y-m-d");
 $endDate   = date("Y-m-d", strtotime("now + " . $date . " days"));
@@ -42,22 +48,22 @@ $html = "";
 //$displayType = 1;
 switch ($displayType) {
     case 1:  // list type, grouped by date
-        $html = calendar_widget_d7_list_format($jsonArr, $startDate, $endDate);
+        $html = calendar_widget_d7_list_format($jsonArr, $startDate, $endDate, $limit);
         break;
     case 2:  // Vertical tiles, limited to first 3
-        $html = calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDate);
+        $html = calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDate, $limit);
         break;
     case 3:  // Horizontal tiles, limited to first 3
-        $html = calendar_widget_d7_hoizontal_tiles_limited($jsonArr, $startDate, $endDate);
+        $html = calendar_widget_d7_horizontal_tiles_limited($jsonArr, $startDate, $endDate, $limit);
         break;
     case 4:  // Vertical tiles, showing 3 in a slider
-        $html = calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate);
+        $html = calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate, $limit);
         break;
     case 5:  // Horizontal tiles, showing 3 in a slider
-        $html = calendar_widget_d7_horizontal_tiles_slider($jsonArr, $startDate, $endDate);
+        $html = calendar_widget_d7_horizontal_tiles_slider($jsonArr, $startDate, $endDate, $limit);
         break;
     default:
-        $html = calendar_widget_d7_list_format($jsonArr, $startDate, $endDate);
+        $html = calendar_widget_d7_list_format($jsonArr, $startDate, $endDate, $limit);
         break;
 }
 /* include calendar tile component for those display options */
@@ -73,7 +79,7 @@ print $html;
 *  1. List format is default simple list format, listed by date groups. This is the default format.
  * It takes the array of json, the startDate and the endDate
  */
-function calendar_widget_d7_list_format($jsonArr, $startDate, $endDate) {
+function calendar_widget_d7_list_format($jsonArr, $startDate, $endDate, $limit) {
 
     if (empty($jsonArr)) {
         // list is empty.
@@ -87,8 +93,9 @@ function calendar_widget_d7_list_format($jsonArr, $startDate, $endDate) {
         $currentTime->setTimestamp(strtotime("now"));
 
         $first_item = true;
-
+        $count = 0;
         foreach($jsonArr as $item) {
+            if($count == $limit) break;
 //    $html .= '<p>There is an event.<p>';
             $new_date = new DateTime();
             $new_date->setTimestamp(strtotime($item['StartDateTime']));
@@ -129,6 +136,7 @@ function calendar_widget_d7_list_format($jsonArr, $startDate, $endDate) {
 
             $html .= '</div>';
             $html .= '</div>';
+            count++;
         }
         $html .= '</div>'; // ending the wrapping div with start and end date classes
     }
@@ -139,8 +147,7 @@ function calendar_widget_d7_list_format($jsonArr, $startDate, $endDate) {
 *  2. Vertical Tiles Limited format shows 3 vertical tiles
  *  * It takes the array of json, the startDate and the endDate
  */
-function calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDate) {
-
+function calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDate, $limit) {
 
     if (empty($jsonArr)) {
         // list is empty.
@@ -186,7 +193,7 @@ function calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDat
 *  3. Horizontal Tiles Limited format shows 3 horizontal tiles
  *  * It takes the array of json, the startDate and the endDate
  */
-function calendar_widget_d7_hoizontal_tiles_limited($jsonArr, $startDate, $endDate) {
+function calendar_widget_d7_horizontal_tiles_limited($jsonArr, $startDate, $endDate, $limit) {
 
     if (empty($jsonArr)) {
         // list is empty.
@@ -229,13 +236,42 @@ function calendar_widget_d7_hoizontal_tiles_limited($jsonArr, $startDate, $endDa
 *  4. Vertical Tiles Slider format shows 3 vertical tiles, scrolling through a slider
  *  * It takes the array of json, the startDate and the endDate
  */
-function calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate) {
+function calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate, $limit) {
 
     if (empty($jsonArr)) {
         // list is empty.
         $html = "<h3>No events.</h3>";
     } else {
-// add content to html
+        if($limit == -1) {
+            $limit = 3;
+        }
+//    $limit = 3;
+        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '">';
+//    $html .= '<p>the limit is ' . $limit . '</p>';
+        $count = 0;
+        foreach($jsonArr as $item) {
+            if($count == $limit) break;
+            $html .= '<byu-calendar-tile layout="vertical">';
+            $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
+            $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
+
+
+            if ($item['AllDay'] == 'false') {
+                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). '</div>';
+            } else {
+                $html .= '<div class="time" slot="time">All Day</div>';
+            }
+
+            if ($item['LocationName'] != null) {
+                $html .= '<div class="location" slot="location">' . $item['LocationName'] . '</div>';
+            }
+            $html .= '</byu-calendar-tile>';
+//Testing dummy content:
+//        $html .= '<byu-calendar-tile layout="vertical">  <p slot="date">2017-02-15</p> 	<a href="www.google.com" slot="title">My Event Title</a><p slot="time">7:00 PM</p>	<p slot="location">Wilkinson Ballroom</p></byu-calendar-tile>';
+            $count++;
+
+        }
+        $html .= '</div>'; // ending the wrapping div with start and end date classes
     }
 
     return $html;
@@ -246,17 +282,40 @@ function calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate
 *  5. Horizontal Tiles Slider format shows 3 horizontal tiles, scrolling through a slider
  *  * It takes the array of json, the startDate and the endDate
  */
-function calendar_widget_d7_hoizontal_tiles_slider($jsonArr, $startDate, $endDate) {
+function calendar_widget_d7_horizontal_tiles_slider($jsonArr, $startDate, $endDate, $limit) {
 
     if (empty($jsonArr)) {
         // list is empty.
         $html = "<h3>No events.</h3>";
     } else {
-// add content to html
+
+        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '">';
+//    $html .= '<p>the limit is ' . $limit . '</p>';
+        $count = 0;
+        foreach($jsonArr as $item) {
+            if($count == $limit) break;
+            $html .= '<byu-calendar-tile layout="horizontal">';
+            $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
+            $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
+            if ($item['AllDay'] == 'false') {
+                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). '</div>';
+            } else {
+                $html .= '<div class="time" slot="time">All Day</div>';
+            }
+//      print_r($item['Description']);
+            if ($item['ShortDescription'] != 'null') {
+                $html .= '<p slot="description">' . $item['ShortDescription'] . '</p>';
+            }
+            if ($item['LocationName'] != null) {
+                $html .= '<div class="location" slot="location">' . $item['LocationName'] . '</div>';
+            }
+            $html .= '</byu-calendar-tile>';
+            $count++;
+        }
+        $html .= '</div>'; // ending the wrapping div with start and end date classes
     }
 
     return $html;
-
 }
 
 
