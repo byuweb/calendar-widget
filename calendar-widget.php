@@ -136,7 +136,7 @@ function calendar_widget_d7_list_format($jsonArr, $startDate, $endDate, $limit) 
 
             $html .= '</div>';
             $html .= '</div>';
-            count++;
+            $count++;
         }
         $html .= '</div>'; // ending the wrapping div with start and end date classes
     }
