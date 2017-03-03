@@ -29,22 +29,20 @@
             price: '',
             /* -- Display Type Options:
             1: list type, grouped by date
-            2: Vertical tiles, limited to first 3.
-            3: Horizontal tiles, limited to first 3.
-            4: Vertical tiles, showing 3 in a slider - not available yet.
-            5: Horizontal tiles, showing 3 in a slider - not available yet.
+            2: Vertical tiles.
+            3: Horizontal tiles.
             */
             display: 3,
             /* -- this limit is optional. It is for the purpose of putting a max limit on how many events are returned.
             * The display type you choose will also determine the limit.I.e. for the list format you may want a limit of 10 or 20.
             * For the vertical tile display you may want a limit of 3 or 4. For horizontal you may want a limit of 2 or 4.
             * Note that tile displays will wrap to the next line if the number of events returned can't all fit in one row. */
-            limit: 4,  // no limit, the default. This will show however many events there are for the above criteria.
+            limit: 0,  // no limit, the default. This will show however many events there are for the above criteria.
 //            limit: 3,
         };
         
         var unique = "parent-div-" + Math.floor(Math.random()*(9999999-1000000+1)+1000000);
-        document.write("<div class='block-calendar-widget' id='"+ unique +"'></div>");
+        document.write("<div class='block-calendar-widget-block' id='"+ unique +"'></div>");
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
