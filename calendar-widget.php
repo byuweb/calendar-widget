@@ -56,11 +56,11 @@ switch ($displayType) {
     case 3:  // Horizontal tiles, limited to first 3
         $html = calendar_widget_d7_horizontal_tiles_limited($jsonArr, $startDate, $endDate, $limit);
         break;
-    case 4:  // Vertical tiles, showing 3 in a slider
-        $html = calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate, $limit);
+    case 4:  // Full page Calendar rows
+        $html = calendar_widget_d7_fullpage_rows($jsonArr, $startDate, $endDate, $limit);
         break;
-    case 5:  // Horizontal tiles, showing 3 in a slider
-        $html = calendar_widget_d7_horizontal_tiles_slider($jsonArr, $startDate, $endDate, $limit);
+    case 5:  // Full page Calendar rows with Image
+        $html = calendar_widget_d7_fullpage_image_rows($jsonArr, $startDate, $endDate, $limit);
         break;
     default:
         $html = calendar_widget_d7_list_format($jsonArr, $startDate, $endDate, $limit);
@@ -231,45 +231,61 @@ function calendar_widget_d7_horizontal_tiles_limited($jsonArr, $startDate, $endD
 }
 
 
-
 /* --
-*  4. Vertical Tiles Slider format shows 3 vertical tiles, scrolling through a slider
+*  4. Full page calendar display with rows
  *  * It takes the array of json, the startDate and the endDate
  */
-function calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate, $limit) {
+function calendar_widget_d7_fullpage_rows($jsonArr, $startDate, $endDate, $limit) {
 
     if (empty($jsonArr)) {
         // list is empty.
         $html = "<h3>No events.</h3>";
     } else {
-        if($limit == -1) {
-            $limit = 3;
-        }
-//    $limit = 3;
-        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '" style="display: flex; flex-wrap: wrap; margin: 20px 0px;">';
+
+        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '">';
 //    $html .= '<p>the limit is ' . $limit . '</p>';
         $count = 0;
         foreach($jsonArr as $item) {
             if($count == $limit) break;
-            $html .= '<byu-calendar-tile layout="vertical">';
+            $html .= '<byu-calendar-row type="tile">';
             $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
-            $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
-
-
+            $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank">' . $item['Title'] . '</a>';
             if ($item['AllDay'] == 'false') {
-                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). '</div>';
+                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). ' ' . $item['Timezone'] . '</div>';
             } else {
                 $html .= '<div class="time" slot="time">All Day</div>';
             }
-
             if ($item['LocationName'] != null) {
                 $html .= '<div class="location" slot="location">' . $item['LocationName'] . '</div>';
             }
-            $html .= '</byu-calendar-tile>';
-//Testing dummy content:
-//        $html .= '<byu-calendar-tile layout="vertical">  <p slot="date">2017-02-15</p> 	<a href="www.google.com" slot="title">My Event Title</a><p slot="time">7:00 PM</p>	<p slot="location">Wilkinson Ballroom</p></byu-calendar-tile>';
-            $count++;
 
+            // pricing and tickets
+            if($item['TicketsExist'] == 'Yes') {
+
+                if($item['IsFree'] == 'true') {
+                    $html .= '<p slot="price">Free</p>';
+                    if ($item['TickerUrl'] != null) {
+                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketUrl'] . '">FREE TICKETS</a>';
+                    }
+                } else { // price or range
+                    if ($item['HighPrice'] != null) {
+                        $html .= '<p slot="price">' . $item['LowPrice'] . ' - ' . $item['HighPrice'] . '</p>';
+                    } else {
+                        $html .= '<p slot="price">' . $item['LowPrice'] . '</p>';
+                    }
+
+                    if ($item['TickerUrl'] != null) {
+                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketUrl'] . '">TICKETS</a>';
+                    }
+                }
+            }
+
+            $html .= '<a href="' . $item['FullUrl'] . '" slot="link" target="_blank">SEE FULL EVENT</a>';
+
+
+
+            $html .= '</byu-calendar-row>';
+            $count++;
         }
         $html .= '</div>'; // ending the wrapping div with start and end date classes
     }
@@ -278,45 +294,95 @@ function calendar_widget_d7_vertical_tiles_slider($jsonArr, $startDate, $endDate
 
 }
 
+
 /* --
-*  5. Horizontal Tiles Slider format shows 3 horizontal tiles, scrolling through a slider
+*  5. Full page calendar display with rows WITH images, grouped by date. Includes price / ticket info.
  *  * It takes the array of json, the startDate and the endDate
  */
-function calendar_widget_d7_horizontal_tiles_slider($jsonArr, $startDate, $endDate, $limit) {
+
+
+function calendar_widget_d7_fullpage_image_rows($jsonArr, $startDate, $endDate, $limit) {
 
     if (empty($jsonArr)) {
         // list is empty.
         $html = "<h3>No events.</h3>";
     } else {
 
-        $html = '<div class="tile-container startDate-' . $startDate . ' endDate-' . $endDate . '" style="display: flex; flex-wrap: wrap; margin: 20px 0px;">';
+//    $html = '<div class="startDate-' . $startDate . ' endDate-' . $endDate . ' calendar-widget-block display-list">';
+//    $html = '<h3>' . $startDate . ' through ' . $endDate . '</h3><p>HEre is some text.</p><p>And here is some more text.</p>';
+//
 //    $html .= '<p>the limit is ' . $limit . '</p>';
+        $currentTime = new DateTime();
+        $currentTime->setTimestamp(strtotime("now"));
+
+        $first_item = true;
         $count = 0;
         foreach($jsonArr as $item) {
             if($count == $limit) break;
-            $html .= '<byu-calendar-tile layout="horizontal">';
-            $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
-            $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
+//    $html .= '<p>There is an event.<p>';
+            $new_date = new DateTime();
+            $new_date->setTimestamp(strtotime($item['StartDateTime']));
+            // set date's timezone if needed
+
+            if ($first_item) {
+                $html .= '<div class="fullpage-date-wrapper"><div class="fullpage-date-weekday">' . date("l", strtotime($item['StartDateTime'])) . ' | ' . '</div><div class="fullpage-date-text">' . date("F j, Y", strtotime($item['StartDateTime'])) . '</div></div>';
+                $currentTime = $new_date;
+                $first_item = false;
+            }
+
+            $diff = $currentTime->diff($new_date);
+
+            if ($diff->format('%a') !== '0') {
+//        $html .= '<h3><div class="date-text">' . date("l, F j", strtotime($item['StartDateTime'])) . '</div></h3>';
+                $html .= '<div class="fullpage-date-wrapper"><div class="fullpage-date-weekday">' . date("l", strtotime($item['StartDateTime'])) . ' | ' . '</div><div class="fullpage-date-text">' . date("F j, Y", strtotime($item['StartDateTime'])) . '</div></div>';
+                $currentTime = $new_date;
+            }
+
+            $html .= '<byu-calendar-row type="image">';
+//      $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
+
+            $html .= '<img slot="image" src="' . $item['ImgUrl'] . '">';
+            $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank">' . $item['Title'] . '</a>';
             if ($item['AllDay'] == 'false') {
-                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). '</div>';
+                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). ' ' . $item['Timezone'] . '</div>';
             } else {
                 $html .= '<div class="time" slot="time">All Day</div>';
-            }
-//      print_r($item['Description']);
-            if ($item['ShortDescription'] != 'null') {
-                $html .= '<p slot="description">' . $item['ShortDescription'] . '</p>';
             }
             if ($item['LocationName'] != null) {
                 $html .= '<div class="location" slot="location">' . $item['LocationName'] . '</div>';
             }
-            $html .= '</byu-calendar-tile>';
+
+            // pricing and tickets
+            if($item['TicketsExist'] == 'Yes') {
+
+                if($item['IsFree'] == 'true') {
+                    $html .= '<p slot="price">Free</p>';
+                    if ($item['TickerUrl'] != null) {
+                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketUrl'] . '">FREE TICKETS</a>';
+                    }
+                } else { // price or range
+                    if ($item['HighPrice'] != null) {
+                        $html .= '<p slot="price">' . $item['LowPrice'] . ' - ' . $item['HighPrice'] . '</p>';
+                    } else {
+                        $html .= '<p slot="price">' . $item['LowPrice'] . '</p>';
+                    }
+
+                    if ($item['TickerUrl'] != null) {
+                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketUrl'] . '">TICKETS</a>';
+                    }
+                }
+            }
+
+            $html .= '<a href="' . $item['FullUrl'] . '" slot="link" target="_blank">SEE FULL EVENT</a>';
+
+            $html .= '</byu-calendar-row>';
             $count++;
         }
-        $html .= '</div>'; // ending the wrapping div with start and end date classes
+//    $html .= '</div>'; // ending the wrapping div with start and end date classes
     }
-
     return $html;
 }
+
 
 
 /* ========================= CSS ========================= */
