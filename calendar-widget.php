@@ -168,7 +168,7 @@ function calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDat
 
 
             if ($item['AllDay'] == 'false') {
-                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). '</div>';
+                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])) . ' ' . $item['Timezone'] . '</div>';
             } else {
                 $html .= '<div class="time" slot="time">All Day</div>';
             }
@@ -209,7 +209,7 @@ function calendar_widget_d7_horizontal_tiles_limited($jsonArr, $startDate, $endD
             $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
             $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
             if ($item['AllDay'] == 'false') {
-                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). '</div>';
+                $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])) . ' ' . $item['Timezone'] . '</div>';
             } else {
                 $html .= '<div class="time" slot="time">All Day</div>';
             }
