@@ -392,7 +392,7 @@ $css=<<<CSS
 .calendar-block-title {
     font-family: "Sentinel A", "Sentinel B";
 }
-.block-calendar-widget div {
+.block-calendar-widget-block div {
     font-family: "Gotham A", "Gotham B";
 }
 a {
@@ -405,11 +405,11 @@ a:hover, a:focus {
 }
 
 /* ----------- List format -------- */
-.block-calendar-widget {
+.block-calendar-widget-block {
     width: 289px;
 }
 
-.block-calendar-widget h2 {
+.block-calendar-widget-block h2 {
     color: #002e5d; // navy
     border-bottom: 1px solid #e5e5e5;
     font-size: 28px;
@@ -422,7 +422,7 @@ a:hover, a:focus {
     margin-right: 20px;
 }
 @media screen and (max-width: 1023px) {
-    .block-calendar-widget {
+    .block-calendar-widget-block {
         width: 100%;
     }
     .calendar-widget-block.display-list {
@@ -430,17 +430,17 @@ a:hover, a:focus {
         margin-right: 0px;
     }
 }
-.block-calendar-widget .date-wrapper {
+.block-calendar-widget-block .date-wrapper {
     display: flex;
     margin-bottom: 12px;
 }
-.block-calendar-widget .date-day-number {
+.block-calendar-widget-block .date-day-number {
     font-family: "Sentinel A", "Sentinel B";
     font-weight: bold;
     font-size: 26px;
     margin-right: 7px;
 }
-.block-calendar-widget .date-text {
+.block-calendar-widget-block .date-text {
     font-weight: 500;
     font-size: 21px;
     padding-top: 4px;
@@ -448,7 +448,7 @@ a:hover, a:focus {
 }
 
 
-.block-calendar-widget .event-content {
+.block-calendar-widget-block .event-content {
     padding: 0px 0px 15px 15px;
     display: flex;
     justify-content: space-between;
@@ -456,7 +456,7 @@ a:hover, a:focus {
     font-size: 17px;
 }
 
-.block-calendar-widget .event-time {
+.block-calendar-widget-block .event-time {
     min-width: 60px;
     margin-left: 12px;
     color: #767676;
