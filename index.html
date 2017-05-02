@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- enable this if you AREN'T already loading the BYU Fonts in your theme or on your page
-    <link rel="stylesheet" type="text/css" href="//cloud.typography.com/75214/7683772/css/fonts.css"> -->
-    <script src="//cdn.byu.edu/byu-theme-components/latest/byu-theme-components.min.js"></script>
-
+    <!-- These are the sources required for some calendar display styles, include these on your page: -->
     <script src="//cdn.byu.edu/byu-calendar-tile/latest/byu-calendar-tile.min.js"></script>
     <script src="//cdn.byu.edu/byu-calendar-row/latest/byu-calendar-row.min.js"></script>
+     <!-- enable this if you AREN'T already loading the BYU Fonts in your theme or on your page
+    <link rel="stylesheet" type="text/css" href="//cloud.typography.com/75214/7683772/css/fonts.css"> -->
     <!-- CSS for the Full Page image row version: (Version #4) -->
     <style>
         .fullpage-date-wrapper {
@@ -77,7 +76,7 @@
                 document.getElementById(unique).innerHTML = response;
             }
         };
-        xhttp.open("POST", "https://calendar-test.byu.edu/calendar-widget/calendar-widget.php");
+        xhttp.open("POST", "https://calendar.byu.edu/calendar-widget/calendar-widget.php");
         xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify(data));
     })();
