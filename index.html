@@ -3,7 +3,9 @@
 <head>
     <!-- enable this if you AREN'T already loading the BYU Fonts in your theme or on your page
     <link rel="stylesheet" type="text/css" href="//cloud.typography.com/75214/7683772/css/fonts.css"> -->
-    <script src="//cdn.byu.edu/byu-calendar-tile/latest/components.min.js"></script>
+    <script src="//cdn.byu.edu/byu-theme-components/latest/byu-theme-components.min.js"></script>
+
+    <script src="//cdn.byu.edu/byu-calendar-tile/latest/byu-calendar-tile.min.js"></script>
     <script src="//cdn.byu.edu/byu-calendar-row/latest/byu-calendar-row.min.js"></script>
     <!-- CSS for the Full Page image row version: (Version #4) -->
     <style>
@@ -16,11 +18,11 @@
         }
         .fullpage-date-weekday {
             text-transform: uppercase;
-            font-family: "Sentinel A", "Sentinel B", "Vitesse A", "Vitesse B";
+            font-family: "Sentinel A", "Sentinel B", "Vitesse A", "Vitesse B", sans-serif;
         }
         .fullpage-date-text {
             padding-left: 10px;
-            font-family: "Sentinel A", "Sentinel B", "Vitesse A", "Vitesse B";
+            font-family: "Sentinel A", "Sentinel B", "Vitesse A", "Vitesse B", sans-serif;
         }
     </style>
 
@@ -57,12 +59,12 @@
             4: Full Page calendar list with tile rows, including pricing/ticket info.
             5: Full Page calendar list with image rows (grouped by date), including pricing/ticket info.
             */
-            display: 3,
+            display: 4,
             /* -- this limit is optional. It is for the purpose of putting a max limit on how many events are returned.
             * The display type you choose will also determine the limit.I.e. for the list format you may want a limit of 10 or 20.
             * For the vertical tile display you may want a limit of 3 or 4. For horizontal you may want a limit of 2 or 4.
             * Note that tile displays will wrap to the next line if the number of events returned can't all fit in one row. */
-            limit: 0,  // no limit, the default. This will show however many events there are for the above criteria.
+            limit: 10,  // no limit, the default. This will show however many events there are for the above criteria.
 //            limit: 3,
         };
         

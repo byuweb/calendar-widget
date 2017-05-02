@@ -29,7 +29,7 @@ if($limit == 0) {
 $startDate = date("Y-m-d");
 $endDate   = date("Y-m-d", strtotime("now + " . $date . " days"));
 
-$url = 'https://calendar-test.byu.edu/api/Events?event[min][date]=' . $startDate . '&event[max][date]=' . $endDate . '&categories=' . $categories . '&price=' . $price;
+$url = 'https://calendar.byu.edu/api/Events?event[min][date]=' . $startDate . '&event[max][date]=' . $endDate . '&categories=' . $categories . '&price=' . $price;
 
 $options = array(
     'http' => array(
@@ -163,7 +163,7 @@ function calendar_widget_d7_vertical_tiles_limited($jsonArr, $startDate, $endDat
         foreach($jsonArr as $item) {
             if($count == $limit) break;
             $html .= '<byu-calendar-tile layout="vertical">';
-            $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
+            $html .= '<p slot="date" >' . date("Y-m-d", strtotime($item['StartDateTime'])) . '</p>';
             $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
 
 
@@ -206,7 +206,7 @@ function calendar_widget_d7_horizontal_tiles_limited($jsonArr, $startDate, $endD
         foreach($jsonArr as $item) {
             if($count == $limit) break;
             $html .= '<byu-calendar-tile layout="horizontal">';
-            $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
+            $html .= '<p slot="date" >' . date("Y-m-d", strtotime($item['StartDateTime'])) . '</p>';
             $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank"><div class="title">' . $item['Title'] . '</div></a>';
             if ($item['AllDay'] == 'false') {
                 $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])) . ' ' . $item['Timezone'] . '</div>';
@@ -248,7 +248,7 @@ function calendar_widget_d7_fullpage_rows($jsonArr, $startDate, $endDate, $limit
         foreach($jsonArr as $item) {
             if($count == $limit) break;
             $html .= '<byu-calendar-row type="tile">';
-            $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
+            $html .= '<p slot="date" >' . date("Y-m-d", strtotime($item['StartDateTime'])) . '</p>';
             $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank">' . $item['Title'] . '</a>';
             if ($item['AllDay'] == 'false') {
                 $html .= '<div class="time" slot="time">' . date("g:i A", strtotime($item['StartDateTime'])). ' ' . $item['Timezone'] . '</div>';
@@ -264,18 +264,18 @@ function calendar_widget_d7_fullpage_rows($jsonArr, $startDate, $endDate, $limit
 
                 if($item['IsFree'] == 'true') {
                     $html .= '<p slot="price">Free</p>';
-                    if ($item['TickerUrl'] != null) {
-                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketUrl'] . '">FREE TICKETS</a>';
+                    if (!empty($item['TicketsUrl'])) {
+                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketsUrl'] . '">FREE TICKETS</a>';
                     }
                 } else { // price or range
-                    if ($item['HighPrice'] != null) {
-                        $html .= '<p slot="price">' . $item['LowPrice'] . ' - ' . $item['HighPrice'] . '</p>';
+                    if (!empty($item['HighPrice'])) {
+                        $html .= '<p slot="price">Tickets: $' . $item['LowPrice'] . ' - $' . $item['HighPrice'] . '</p>';
                     } else {
-                        $html .= '<p slot="price">' . $item['LowPrice'] . '</p>';
+                        $html .= '<p slot="price">Tickets: $' . $item['LowPrice'] . '</p>';
                     }
 
-                    if ($item['TickerUrl'] != null) {
-                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketUrl'] . '">TICKETS</a>';
+                    if (!empty($item['TicketsUrl'])) {
+                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketsUrl'] . '">TICKETS</a>';
                     }
                 }
             }
@@ -339,7 +339,7 @@ function calendar_widget_d7_fullpage_image_rows($jsonArr, $startDate, $endDate, 
             }
 
             $html .= '<byu-calendar-row type="image">';
-//      $html .= '<p slot="date" >' . date("Y-M-j", strtotime($item['StartDateTime'])) . '</p>';
+//      $html .= '<p slot="date" >' . date("Y-m-d", strtotime($item['StartDateTime'])) . '</p>';
 
             $html .= '<img slot="image" src="' . $item['ImgUrl'] . '">';
             $html .= '<a href="' . $item['FullUrl'] . ' " slot="title" target="_blank">' . $item['Title'] . '</a>';
@@ -357,22 +357,23 @@ function calendar_widget_d7_fullpage_image_rows($jsonArr, $startDate, $endDate, 
 
                 if($item['IsFree'] == 'true') {
                     $html .= '<p slot="price">Free</p>';
-                    if ($item['TickerUrl'] != null) {
-                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketUrl'] . '">FREE TICKETS</a>';
+                    if (!empty($item['TicketsUrl'])) {
+                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketsUrl'] . '">FREE TICKETS</a>';
                     }
                 } else { // price or range
-                    if ($item['HighPrice'] != null) {
-                        $html .= '<p slot="price">' . $item['LowPrice'] . ' - ' . $item['HighPrice'] . '</p>';
+                    if (empty($item['HighPrice'])) {
+                        $html .= '<p slot="price">Tickets: $' . $item['LowPrice'] . '</p>';
                     } else {
-                        $html .= '<p slot="price">' . $item['LowPrice'] . '</p>';
+                        // will come back and get high price working
+//            $html .= '<p slot="price">Tickets: $' . $item['LowPrice'lk] . '</p>';
+                        $html .= '<p slot="price">Tickets: $' . $item['LowPrice'] . ' - $' . $item['HighPrice'] . '</p>';
                     }
 
-                    if ($item['TickerUrl'] != null) {
-                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketUrl'] . '">TICKETS</a>';
+                    if (!empty($item['TicketsUrl'])) {
+                        $html .= '<a slot="tickets-link" target="_blank" href="' . $item['TicketsUrl'] . '">TICKETS</a>';
                     }
                 }
             }
-
             $html .= '<a href="' . $item['FullUrl'] . '" slot="link" target="_blank">SEE FULL EVENT</a>';
 
             $html .= '</byu-calendar-row>';
