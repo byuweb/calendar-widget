@@ -391,10 +391,10 @@ $css=<<<CSS
 <style>
 /* -- General -- */
 .calendar-block-title {
-    font-family: "Sentinel A", "Sentinel B";
+    font-family: "HCo Ringside Narrow SSm", Arial, sans-serif;
 }
 .block-calendar-widget-block div {
-    font-family: "Gotham A", "Gotham B";
+    font-family: "HCo Ringside Narrow SSm", Arial, sans-serif;
 }
 a {
     text-decoration: none;
@@ -436,7 +436,7 @@ a:hover, a:focus {
     margin-bottom: 12px;
 }
 .block-calendar-widget-block .date-day-number {
-    font-family: "Sentinel A", "Sentinel B";
+    font-family: "HCo Ringside Narrow SSm", Arial, sans-serif;
     font-weight: bold;
     font-size: 26px;
     margin-right: 7px;
