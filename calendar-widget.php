@@ -387,7 +387,7 @@ function calendar_widget_d7_fullpage_image_rows($jsonArr, $startDate, $endDate, 
 
 
 /* ========================= CSS ========================= */
-$css=<<<CSS
+$css= <<<CSS
 <style>
 /* -- General -- */
 .calendar-block-title {
